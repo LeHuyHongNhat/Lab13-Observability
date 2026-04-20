@@ -36,3 +36,18 @@ services:
       - ./config/grafana_dashboard.json:/etc/grafana/provisioning/dashboards/lab13_dashboard.json
     depends_on:
       - prometheus
+
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+
+  promtail:
+    image: grafana/promtail:latest
+    volumes:
+      - ./data:/var/log/app
+      - ./config/promtail-config.yml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki

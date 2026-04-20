@@ -21,6 +21,7 @@
     {
       "title": "📊 Total Requests",
       "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "prom-ds" },
       "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
       "targets": [{ "expr": "request_total", "legendFormat": "Requests" }],
       "fieldConfig": {
@@ -43,6 +44,7 @@
     {
       "title": "🚨 Error Rate (%)",
       "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "prom-ds" },
       "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
       "targets": [{ "expr": "sum(rate(request_errors_total[5m])) / sum(rate(request_total[5m])) * 100 or vector(0)", "legendFormat": "Error %" }],
       "fieldConfig": {
@@ -65,6 +67,7 @@
     {
       "title": "⏱️ Avg Latency (ms)",
       "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "prom-ds" },
       "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
       "targets": [{ "expr": "rate(request_latency_ms_sum[5m]) / rate(request_latency_ms_count[5m])", "legendFormat": "Avg Latency" }],
       "fieldConfig": {
@@ -87,6 +90,7 @@
     {
       "title": "🔢 PII Redacted (Total)",
       "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "prom-ds" },
       "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
       "targets": [{ "expr": "pii_scrub_total", "legendFormat": "PII Masked" }],
       "fieldConfig": {
@@ -106,21 +110,24 @@
       }
     },
     {
-      "title": "🔥 Error Breakdown by Type",
-      "type": "piechart",
-      "gridPos": { "h": 8, "w": 6, "x": 0, "y": 20 },
-      "targets": [{ "expr": "sum by (error_type) (request_errors_total)", "legendFormat": "{{error_type}}" }],
-      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" } } },
-      "options": {
-        "reduceOptions": { "calcs": ["lastNotNull"] },
-        "pieType": "donut",
-        "legend": { "displayMode": "table", "placement": "right" },
-        "tooltip": { "mode": "single" }
+      "title": "💰 Total Cost (USD)",
+      "type": "gauge",
+      "datasource": { "type": "prometheus", "uid": "prom-ds" },
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 4 },
+      "targets": [{ "expr": "request_cost_usd_total", "legendFormat": "Cost" }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD", "decimals": 5,
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "green", "value": null }, { "color": "red", "value": 2.5 }
+          ]}
+        }
       }
     },
     {
       "title": "📈 Traffic (Requests/sec)",
       "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "prom-ds" },
       "gridPos": { "h": 8, "w": 16, "x": 8, "y": 4 },
       "targets": [{ "expr": "rate(request_total[1m])", "legendFormat": "Requests/sec" }],
       "fieldConfig": {
@@ -134,6 +141,7 @@
     {
       "title": "⚡ Latency Percentiles P50 / P95 / P99",
       "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "prom-ds" },
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 12 },
       "targets": [
         { "expr": "histogram_quantile(0.50, sum by (le) (rate(request_latency_ms_bucket[1m])))", "legendFormat": "P50" },
@@ -150,23 +158,23 @@
       }
     },
     {
-      "title": "💰 Total Cost (USD)",
-      "type": "gauge",
-      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 4 },
-      "targets": [{ "expr": "request_cost_usd_total", "legendFormat": "Cost" }],
-      "fieldConfig": {
-        "defaults": {
-          "unit": "currencyUSD", "decimals": 5,
-          "thresholds": { "mode": "absolute", "steps": [
-            { "color": "green", "value": null }, { "color": "red", "value": 2.5 }
-          ]}
-        }
+      "title": "🧪 Feature Distribution (from Logs)",
+      "type": "piechart",
+      "datasource": { "type": "loki", "uid": "loki-ds" },
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 20 },
+      "targets": [{ "expr": "sum by (feature) (count_over_time({job=\"api_logs\", event=\"request_received\"} [15m]))", "legendFormat": "{{feature}}" }],
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" } } },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "pieType": "donut",
+        "legend": { "displayMode": "table", "placement": "right" }
       }
     },
     {
       "title": "💸 Cost Rate (USD/min)",
       "type": "timeseries",
-      "gridPos": { "h": 8, "w": 10, "x": 6, "y": 20 },
+      "datasource": { "type": "prometheus", "uid": "prom-ds" },
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 20 },
       "targets": [{ "expr": "rate(request_cost_usd_total[1m]) * 60", "legendFormat": "Cost/min" }],
       "fieldConfig": {
         "defaults": {
@@ -179,6 +187,7 @@
     {
       "title": "🔤 Tokens In / Out (rate)",
       "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "prom-ds" },
       "gridPos": { "h": 8, "w": 8, "x": 16, "y": 20 },
       "targets": [
         { "expr": "rate(request_tokens_in_total[1m])", "legendFormat": "In" },
@@ -187,45 +196,31 @@
       "fieldConfig": { "defaults": { "unit": "short" } }
     },
     {
-      "title": "💰 Avg Cost per Request",
-      "type": "stat",
-      "gridPos": { "h": 4, "w": 8, "x": 0, "y": 28 },
-      "targets": [{ "expr": "request_cost_usd_total / request_total", "legendFormat": "Avg Cost" }],
-      "fieldConfig": {
-        "defaults": {
-          "unit": "currencyUSD", "decimals": 5,
-          "color": { "mode": "thresholds" },
-          "thresholds": { "mode": "absolute", "steps": [
-            { "color": "green", "value": null },
-            { "color": "yellow", "value": 0.005 },
-            { "color": "red", "value": 0.01 }
-          ]}
-        }
-      },
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background", "justifyMode": "center" }
+      "title": "👤 Top Active Sessions",
+      "type": "barchart",
+      "datasource": { "type": "loki", "uid": "loki-ds" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 28 },
+      "targets": [{ "expr": "topk(5, sum by (session_id) (count_over_time({job=\"api_logs\", event=\"request_received\"} [15m])))", "legendFormat": "{{session_id}}" }],
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" } } }
     },
     {
-      "title": "⚡ Avg Tokens per Request",
-      "type": "stat",
-      "gridPos": { "h": 4, "w": 8, "x": 8, "y": 28 },
-      "targets": [{ "expr": "(request_tokens_in_total + request_tokens_out_total) / request_total", "legendFormat": "Avg Tokens" }],
-      "fieldConfig": {
-        "defaults": {
-          "unit": "short", "decimals": 0,
-          "color": { "mode": "thresholds" },
-          "thresholds": { "mode": "absolute", "steps": [
-            { "color": "green", "value": null },
-            { "color": "yellow", "value": 200 },
-            { "color": "red", "value": 500 }
-          ]}
-        }
-      },
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background", "justifyMode": "center" }
+      "title": "🤖 Model Activity Distribution",
+      "type": "piechart",
+      "datasource": { "type": "loki", "uid": "loki-ds" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 28 },
+      "targets": [{ "expr": "sum by (model) (count_over_time({job=\"api_logs\", event=\"request_received\"} [15m]))", "legendFormat": "{{model}}" }],
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" } } },
+      "options": {
+        "reduceOptions": { "calcs": ["sum"] },
+        "pieType": "donut",
+        "legend": { "displayMode": "table", "placement": "right" }
+      }
     },
     {
       "title": "🎯 Quality Score (current)",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 8, "x": 16, "y": 28 },
+      "datasource": { "type": "prometheus", "uid": "prom-ds" },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 36 },
       "targets": [{ "expr": "request_quality_score_sum / request_quality_score_count", "legendFormat": "Quality" }],
       "fieldConfig": {
         "defaults": {
@@ -241,55 +236,24 @@
       "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background", "justifyMode": "center" }
     },
     {
-      "title": "🎯 Quality Score — Trend over Time",
-      "type": "timeseries",
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 32 },
-      "targets": [{ "expr": "request_quality_score_sum / request_quality_score_count", "legendFormat": "Quality Avg" }],
-      "fieldConfig": {
-        "defaults": {
-          "min": 0, "max": 1, "unit": "percentunit",
-          "color": { "fixedColor": "green", "mode": "fixed" },
-          "custom": { "fillOpacity": 20 },
-          "thresholds": { "mode": "absolute", "steps": [
-            { "color": "red", "value": 0 }, { "color": "green", "value": 0.75 }
-          ]}
+      "title": "💬 Recent Messages & Answer Previews (PII-Scrubbed)",
+      "type": "table",
+      "datasource": { "type": "loki", "uid": "loki-ds" },
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 44 },
+      "targets": [
+        {
+          "expr": "{job=\"api_logs\", event=\"request_received\"} | json | line_format \"{{.ts}} | {{.correlation_id}} | {{.feature}} | {{.message}}\"",
+          "format": "table"
         }
-      }
+      ]
     },
     {
-      "title": "📋 Latency Distribution — Request Buckets",
-      "type": "table",
-      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 40 },
-      "targets": [{
-        "expr": "request_latency_ms_bucket",
-        "legendFormat": "le={{le}}",
-        "instant": true,
-        "format": "table"
-      }],
-      "transformations": [
-        { "id": "organize", "options": {
-          "renameByName": {
-            "le": "Latency <= (ms)",
-            "Value": "Requests in Bucket",
-            "Time": "Timestamp"
-          },
-          "excludeByName": { "__name__": true, "job": true, "instance": true }
-        }}
-      ],
-      "fieldConfig": {
-        "defaults": {
-          "custom": { "align": "center", "displayMode": "color-background-solid" },
-          "thresholds": { "mode": "absolute", "steps": [
-            { "color": "green", "value": null },
-            { "color": "yellow", "value": 5 },
-            { "color": "red", "value": 15 }
-          ]}
-        }
-      },
-      "options": {
-        "showHeader": true,
-        "sortBy": [{ "displayName": "Latency <= (ms)", "desc": false }]
-      }
+      "title": "📜 Live API Logs (Tracing Feed)",
+      "type": "logs",
+      "datasource": { "type": "loki", "uid": "loki-ds" },
+      "gridPos": { "h": 12, "w": 24, "x": 0, "y": 54 },
+      "targets": [{ "expr": "{job=\"api_logs\"}", "legendFormat": "API Log" }],
+      "options": { "showTime": true, "enableLogDetails": true, "sortOrder": "Descending" }
     }
   ],
   "refresh": "5s",
@@ -302,6 +266,6 @@
   "timezone": "",
   "title": "Lab 13 Observability Dashboard",
   "uid": "lab13-obs",
-  "version": 6,
+  "version": 9,
   "weekStart": ""
 }
