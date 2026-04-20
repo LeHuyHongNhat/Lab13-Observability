@@ -23,9 +23,10 @@ def send_request(client: httpx.Client, payload: dict) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--concurrency", type=int, default=1, help="Number of concurrent requests")
+    parser.add_argument("--input", type=str, default="data/sample_queries.jsonl", help="Input JSONL file")
     args = parser.parse_args()
 
-    lines = [line for line in QUERIES.read_text(encoding="utf-8").splitlines() if line.strip()]
+    lines = [line for line in Path(args.input).read_text(encoding="utf-8").splitlines() if line.strip()]
     
     with httpx.Client(timeout=30.0) as client:
         if args.concurrency > 1:

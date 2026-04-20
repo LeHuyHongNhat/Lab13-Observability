@@ -44,8 +44,8 @@ def main() -> None:
                 missing_enrichment += 1
 
         # Check PII (naive check for @ or common test credit card)
-        raw = json.dumps(rec)
-        if "@" in raw or "4111" in raw:
+        payload_raw = json.dumps(rec.get("payload", {}))
+        if "@" in payload_raw or "4111" in payload_raw:
             pii_hits.append(rec.get("event", "unknown"))
 
         # Collect correlation IDs
