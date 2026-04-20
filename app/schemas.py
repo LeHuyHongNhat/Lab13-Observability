@@ -38,6 +38,7 @@ class LogRecord(BaseModel):
     tokens_in: Optional[int] = None
     tokens_out: Optional[int] = None
     cost_usd: Optional[float] = None
+    quality_score: Optional[float] = None
     error_type: Optional[str] = None
     tool_name: Optional[str] = None
     payload: Optional[dict[str, Any]] = None
