@@ -47,11 +47,8 @@ async def health() -> dict:
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: Request, body: ChatRequest) -> ChatResponse:
-<<<<<<< HEAD
-=======
     record_traffic()
     
->>>>>>> origin/sonnq
     # Enrich logs with request context (user_id_hash, session_id, feature, model, env)
     bind_contextvars(
         user_id_hash=hash_user_id(body.user_id),
