@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from structlog.contextvars import bind_contextvars
+load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent / ".env")
 
 from prometheus_client import make_asgi_app
 from .agent import LabAgent

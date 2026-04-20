@@ -4,7 +4,15 @@ import os
 from typing import Any
 
 try:
-    from langfuse.decorators import observe, langfuse_context
+    from langfuse import get_client, observe
+
+    _langfuse_client = get_client()
+
+    class _LangfuseContextAdapter:
+        def update_current_trace(self, **kwargs: Any) -> None:
+            _langfuse_client.update_current_trace(**kwargs)
+
+    from langfuse import langfuse_context, observe
 except Exception:  # pragma: no cover
     def observe(*args: Any, **kwargs: Any):
         def decorator(func):
