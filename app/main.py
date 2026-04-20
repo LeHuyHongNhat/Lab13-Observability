@@ -6,6 +6,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from structlog.contextvars import bind_contextvars
 
+from prometheus_client import make_asgi_app
 from .agent import LabAgent
 from .incidents import disable, enable, status
 from .logging_config import configure_logging, get_logger
@@ -19,6 +20,10 @@ configure_logging()
 log = get_logger()
 app = FastAPI(title="Day 13 Observability Lab")
 app.add_middleware(CorrelationIdMiddleware)
+
+# Mount Prometheus metrics
+app.mount("/metrics", make_asgi_app())
+
 agent = LabAgent()
 
 
@@ -35,11 +40,6 @@ async def startup() -> None:
 @app.get("/health")
 async def health() -> dict:
     return {"ok": True, "tracing_enabled": tracing_enabled(), "incidents": status()}
-
-
-@app.get("/metrics")
-async def metrics() -> dict:
-    return snapshot()
 
 
 @app.post("/chat", response_model=ChatResponse)
