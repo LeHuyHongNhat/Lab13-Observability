@@ -15,6 +15,7 @@ PII_PATTERNS: dict[str, str] = {
     "license_plate_vn": r"(?i)\b\d{2}[A-Z]\d?[\-\s\.]?\d{4,5}\b",                 # 51G-123.45
 
 
+
     # ── Tài chính ──────────────────────────────────────────────────────────────
     "tax_code_vn": r"\b\d{10}(?:-\d{3})?\b",                                      # Mã số thuế: 10 số hoặc 10-3 số
     "credit_card": r"(?<!\d)(?:\d[ -]*?){13,19}(?!\d)",                           # Hỗ trợ 13-19 số, dời xuống sau tax_code để ưu tiên
@@ -35,10 +36,12 @@ PII_PATTERNS: dict[str, str] = {
     # ── Fallback Catch-All cho dải số học (Tài khoản ngân hàng / PIN dài) ───
     "bank_account_or_id": r"\b\d{6,}\b",                                          # Dãy từ 6 số trở lên (STK ngân hàng, mã số lạ...)
 
+
 }
 
 
 def scrub_text(text: str) -> str:
+    # Note: Metrics import is here to avoid circular imports if metrics.py imports pii
     from .metrics import P_PII_SCRUB
     safe = text
     for name, pattern in PII_PATTERNS.items():

@@ -49,6 +49,7 @@ async def health() -> dict:
 async def chat(request: Request, body: ChatRequest) -> ChatResponse:
     record_traffic()
 
+
     # Enrich logs with request context (user_id_hash, session_id, feature, model, env)
     bind_contextvars(
         user_id_hash=hash_user_id(body.user_id),
