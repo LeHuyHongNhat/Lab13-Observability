@@ -1,0 +1,8 @@
+{"service": "control", "payload": {"name": "tool_fail"}, "event": "incident_enabled", "correlation_id": "req-f6b6ef37", "level": "warning", "ts": "2026-04-20T16:46:41.430767Z"}
+{"service": "control", "payload": {"name": "tool_fail"}, "event": "incident_disabled", "correlation_id": "req-0a341e12", "level": "warning", "ts": "2026-04-20T16:46:41.436929Z"}
+{"service": "control", "payload": {"name": "rag_slow"}, "event": "incident_enabled", "correlation_id": "req-70e1352f", "level": "warning", "ts": "2026-04-20T16:46:41.437623Z"}
+{"service": "control", "payload": {"name": "rag_slow"}, "event": "incident_disabled", "correlation_id": "req-9d35e05f", "level": "warning", "ts": "2026-04-20T16:47:00.079037Z"}
+{"service": "control", "payload": {"name": "tool_fail"}, "event": "incident_enabled", "correlation_id": "req-[REDACTED_PASSPORT_VN]", "level": "warning", "ts": "2026-04-20T16:50:51.794519Z"}
+{"service": "control", "payload": {"name": "tool_fail"}, "event": "incident_disabled", "correlation_id": "req-113a9a3f", "level": "warning", "ts": "2026-04-20T16:50:51.820774Z"}
+{"service": "control", "payload": {"name": "rag_slow"}, "event": "incident_enabled", "correlation_id": "req-ba50aff8", "level": "warning", "ts": "2026-04-20T16:50:52.296088Z"}
+{"service": "control", "payload": {"name": "rag_slow"}, "event": "incident_disabled", "correlation_id": "req-b81dcc9b", "level": "warning", "ts": "2026-04-20T16:51:16.260663Z"}
