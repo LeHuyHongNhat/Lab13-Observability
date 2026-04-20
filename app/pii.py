@@ -30,8 +30,12 @@ PII_PATTERNS: dict[str, str] = {
 
 
 def scrub_text(text: str) -> str:
+    from .metrics import P_PII_SCRUB
     safe = text
     for name, pattern in PII_PATTERNS.items():
+        matches = re.findall(pattern, safe)
+        if matches:
+            P_PII_SCRUB.inc(len(matches))
         safe = re.sub(pattern, f"[REDACTED_{name.upper()}]", safe)
     return safe
 

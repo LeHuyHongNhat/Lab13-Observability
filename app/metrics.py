@@ -21,11 +21,16 @@ P_TOKENS_IN = Counter('request_tokens_in_total', 'Total tokens in')
 P_TOKENS_OUT = Counter('request_tokens_out_total', 'Total tokens out')
 P_ERRORS = Counter('request_errors_total', 'Total number of errors', ['error_type'])
 P_QUALITY = Summary('request_quality_score', 'Summary of quality scores')
+P_PII_SCRUB = Counter('pii_scrub_total', 'Total number of PII elements redacted')
+
+
+def record_traffic() -> None:
+    global TRAFFIC
+    TRAFFIC += 1
+    P_TRAFFIC.inc()
 
 
 def record_request(latency_ms: int, cost_usd: float, tokens_in: int, tokens_out: int, quality_score: float) -> None:
-    global TRAFFIC
-    TRAFFIC += 1
     REQUEST_LATENCIES.append(latency_ms)
     REQUEST_COSTS.append(cost_usd)
     REQUEST_TOKENS_IN.append(tokens_in)
@@ -33,7 +38,6 @@ def record_request(latency_ms: int, cost_usd: float, tokens_in: int, tokens_out:
     QUALITY_SCORES.append(quality_score)
     
     # Update Prometheus metrics
-    P_TRAFFIC.inc()
     P_LATENCY.observe(latency_ms)
     P_COST.inc(cost_usd)
     P_TOKENS_IN.inc(tokens_in)

@@ -16,6 +16,7 @@ services:
     image: prom/prometheus:latest
     volumes:
       - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./config/alert_rules.yaml:/etc/prometheus/alert_rules.yaml
     ports:
       - "9090:9090"
     depends_on:
