@@ -2,8 +2,8 @@ version: '3.8'
 services:
   app:
     build: .
-    ports:
-      - "8000:8000"
+    # ports:
+    #  - "8000:8000"
     environment:
       - APP_NAME=day13-observability-lab
       - APP_ENV=dev

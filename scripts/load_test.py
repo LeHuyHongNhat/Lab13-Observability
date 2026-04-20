@@ -24,18 +24,24 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--concurrency", type=int, default=1, help="Number of concurrent requests")
     parser.add_argument("--input", type=str, default="data/sample_queries.jsonl", help="Input JSONL file")
+    parser.add_argument("--loop", action="store_true", help="Run the load test continuously in a loop")
     args = parser.parse_args()
 
     lines = [line for line in Path(args.input).read_text(encoding="utf-8").splitlines() if line.strip()]
     
     with httpx.Client(timeout=30.0) as client:
-        if args.concurrency > 1:
-            with concurrent.futures.ThreadPoolExecutor(max_workers=args.concurrency) as executor:
-                futures = [executor.submit(send_request, client, json.loads(line)) for line in lines]
-                concurrent.futures.wait(futures)
-        else:
-            for line in lines:
-                send_request(client, json.loads(line))
+        while True:
+            if args.concurrency > 1:
+                with concurrent.futures.ThreadPoolExecutor(max_workers=args.concurrency) as executor:
+                    futures = [executor.submit(send_request, client, json.loads(line)) for line in lines]
+                    concurrent.futures.wait(futures)
+            else:
+                for line in lines:
+                    send_request(client, json.loads(line))
+            
+            if not args.loop:
+                break
+            time.sleep(1)  # Tạm nghỉ 1s trước khi lặp lại vòng tiếp theo
 
 
 if __name__ == "__main__":
