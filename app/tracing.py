@@ -15,12 +15,32 @@ except (ImportError, ModuleNotFoundError):
             def update_current_trace(self, **kwargs: Any) -> None:
                 client = get_client()
                 if client:
-                    client.update_current_trace(**kwargs)
+                    try:
+                        client.update_current_trace(**kwargs)
+                    except Exception:
+                        pass
 
             def update_current_observation(self, **kwargs: Any) -> None:
                 client = get_client()
-                if client:
-                    client.update_current_span(**kwargs)
+                if not client:
+                    return
+
+                # Handle metadata separately (for v3+)
+                metadata = kwargs.get("metadata")
+                if metadata is not None:
+                    try:
+                        client.update_current_span(metadata=metadata)
+                    except Exception:
+                        pass
+
+                # Handle usage_details separately (split into update_current_generation)
+                usage_details = kwargs.get("usage_details")
+                if usage_details is not None:
+                    try:
+                        client.update_current_generation(
+                            usage_details=usage_details)
+                    except Exception:
+                        pass
 
         langfuse_context = LangfuseContextWrapper()
     except ImportError:
@@ -33,12 +53,11 @@ except (ImportError, ModuleNotFoundError):
         class _DummyContext:
             def update_current_trace(self, **kwargs: Any) -> None:
                 return None
+
             def update_current_observation(self, **kwargs: Any) -> None:
                 return None
 
         langfuse_context = _DummyContext()
-
-
 
 
 def tracing_enabled() -> bool:
