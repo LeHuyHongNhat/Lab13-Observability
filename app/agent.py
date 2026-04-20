@@ -25,15 +25,31 @@ class LabAgent:
         self.model = model
         self.llm = FakeLLM(model=model)
 
+    MAX_REQUEST_COST = 0.01  # Ngưỡng cho mỗi request
+    MAX_TOTAL_BUDGET = 1000.0  # Tổng ngưỡng ngân sách hệ thống
+
     @observe()
     def run(self, user_id: str, feature: str, session_id: str, message: str) -> AgentResult:
         started = time.perf_counter()
         docs = retrieve(message)
         prompt = f"Feature={feature}\nDocs={docs}\nQuestion={message}"
         response = self.llm.generate(prompt)
+        
+        # 1. Tính toán chi phí
+        cost_usd = self._estimate_cost(response.usage.input_tokens, response.usage.output_tokens)
+        
+        # 2. KIỂM TRA NGƯỠNG NGÂN SÁCH (Budget Guardrails)
+        # Kiểm tra ngưỡng của từng request đơn lẻ
+        if cost_usd > self.MAX_REQUEST_COST:
+            raise ValueError(f"Request cost ${cost_usd} exceeds limit of ${self.MAX_REQUEST_COST}")
+
+        # Kiểm tra tổng ngân sách đã tiêu thụ (tính từ app/metrics)
+        current_total = sum(metrics.REQUEST_COSTS)
+        if (current_total + cost_usd) > self.MAX_TOTAL_BUDGET:
+            raise ValueError(f"Total budget of ${self.MAX_TOTAL_BUDGET} exceeded. Currently spent: ${current_total}")
+
         quality_score = self._heuristic_quality(message, response.text, docs)
         latency_ms = int((time.perf_counter() - started) * 1000)
-        cost_usd = self._estimate_cost(response.usage.input_tokens, response.usage.output_tokens)
 
         langfuse_context.update_current_trace(
             user_id=hash_user_id(user_id),
