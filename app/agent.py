@@ -63,18 +63,18 @@ class LabAgent:
         )
 
     def _estimate_cost(self, tokens_in: int, tokens_out: int) -> float:
-        input_cost = (tokens_in / 1_000_000) * 3
-        output_cost = (tokens_out / 1_000_000) * 15
+        input_cost = (tokens_in / 1_000_000) * 3 # 3usd for 1.000.000 input token 
+        output_cost = (tokens_out / 1_000_000) * 15 # 15usd for 1.000.000 output token
         return round(input_cost + output_cost, 6)
 
     def _heuristic_quality(self, question: str, answer: str, docs: list[str]) -> float:
-        score = 0.5
-        if docs:
+        score = 0.5 # Base score
+        if docs: # If docs are provided, increase the score
             score += 0.2
-        if len(answer) > 40:
+        if len(answer) > 40: # If answer is long enough, increase the score
             score += 0.1
-        if question.lower().split()[0:1] and any(token in answer.lower() for token in question.lower().split()[:3]):
+        if question.lower().split()[0:1] and any(token in answer.lower() for token in question.lower().split()[:3]): # If answer contains keywords from the question, increase the score
             score += 0.1
-        if "[REDACTED" in answer:
+        if "[REDACTED" in answer: # If answer contains redacted information, decrease the score
             score -= 0.2
         return round(max(0.0, min(1.0, score)), 2)

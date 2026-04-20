@@ -6,7 +6,7 @@ from typing import Any
 try:
     # 1. Try v2 style (langfuse.decorators)
     from langfuse.decorators import observe, langfuse_context
-except (ImportError, ModuleNotFoundError):
+except (ImportError, ModuleNotFoundError, Exception):
     try:
         # 2. Try v3+ style (top-level import)
         from langfuse import observe, get_client
@@ -43,7 +43,7 @@ except (ImportError, ModuleNotFoundError):
                         pass
 
         langfuse_context = LangfuseContextWrapper()
-    except ImportError:
+    except (ImportError, Exception):
         # 3. Fallback to dummy mocks
         def observe(*args: Any, **kwargs: Any):
             def decorator(func):
