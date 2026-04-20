@@ -5,7 +5,7 @@ Timeline giả định Lab diễn ra trong 4 tiếng (Ví dụ: Từ 13:30 - 17:
 
 ---
 
-## 1. Lê Huy Hồng Nhật (Tôi) - Vai trò: Tiên phong, Demo Lead & Blueprint
+## 1. Lê Huy Hồng Nhật - Vai trò: Team Lead, Demo Lead & Blueprint
 **Mục tiêu:** Quản trị dự án, gom bằng chứng và đảm bảo app chạy mượt để Live Demo (20đ nhóm + 20đ cá nhân).
 
 - [ ] **Task 1.1: Khởi tạo Repo & Chia Branch**
