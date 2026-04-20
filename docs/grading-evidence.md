@@ -8,7 +8,7 @@
 | 2 | One full trace waterfall | `evidence/08_trace_waterfall.png` | ✅ Done |
 | 3 | JSON logs showing correlation_id | `evidence/06_log_samples.png` | ✅ Done |
 | 4 | Log line with PII redaction | `evidence/04_pii_scrubbing_logs.png` | ✅ Done |
-| 5 | Dashboard with 6 panels | `evidence/01_grafana_dashboard.png` | ✅ Done |
+| 5 | Dashboard with 6 panels | `evidence/01_grafana_dashboard_1.jpg` <br> `evidence/01_grafana_dashboard_2.jpg` <br> `evidence/01_grafana_dashboard_3.jpg` | ✅ Done |
 | 6 | Alert rules with runbook link | `evidence/03_prometheus_alerts_list.png` | ✅ Done |
 
 ## Optional screenshots

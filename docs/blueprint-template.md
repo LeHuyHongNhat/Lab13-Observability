@@ -36,7 +36,9 @@
 - **TRACE_WATERFALL_EXPLANATION**: Span `Chat_Process` ghi lại toàn bộ vòng đời của một request: từ bước RAG (truy xuất tài liệu), LLM sinh câu trả lời giả lập đến tính toán Quality Score. Mọi thông tin về input/output, số lượng token tiêu thụ và độ trễ được Langfuse tự động thu thập.
 
 ### 3.2 Dashboard & SLOs
-- [DASHBOARD_6_PANELS_SCREENSHOT](../evidence/01_grafana_dashboard.png)
+- [DASHBOARD_PART_1_SCREENSHOT](../evidence/01_grafana_dashboard_1.jpg)
+- [DASHBOARD_PART_2_SCREENSHOT](../evidence/01_grafana_dashboard_2.jpg)
+- [DASHBOARD_PART_3_SCREENSHOT](../evidence/01_grafana_dashboard_3.jpg)
 
 - **SLO_TABLE**:
     | SLI | Target | Window | Current Value |
@@ -84,7 +86,7 @@
 
 ### Nguyễn Quế Sơn
 - [TASKS_COMPLETED]: Xây dựng Dashboard 6 panels trên Grafana, thu thập Evidence cho báo cáo, thực hiện xuất Audit Logs để lấy điểm bonus.
-- [EVIDENCE_LINK (01_grafana_dashboard.png)](../evidence/01_grafana_dashboard.png)
+- [EVIDENCE_LINK (01_grafana_dashboard_1.jpg)](../evidence/01_grafana_dashboard_1.jpg)
 
 ### Lê Huy Hồng Nhật
 - [TASKS_COMPLETED]: Quản trị Repo, điều phối task/branch, viết Blueprint report tổng thể, dẫn dắt Live Demo với Giảng viên.
