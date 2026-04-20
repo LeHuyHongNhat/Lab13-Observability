@@ -1,30 +1,54 @@
 from __future__ import annotations
 
-from collections import Counter
+from collections import Counter as PyCounter
 from statistics import mean
+from prometheus_client import Counter, Histogram, Gauge, Summary
 
+# Original state for snapshot() compatibility
 REQUEST_LATENCIES: list[int] = []
 REQUEST_COSTS: list[float] = []
 REQUEST_TOKENS_IN: list[int] = []
 REQUEST_TOKENS_OUT: list[int] = []
-ERRORS: Counter[str] = Counter()
+ERRORS: PyCounter[str] = PyCounter()
 TRAFFIC: int = 0
 QUALITY_SCORES: list[float] = []
 
+# Prometheus Metrics
+P_TRAFFIC = Counter('request_total', 'Total number of requests')
+P_LATENCY = Histogram('request_latency_ms', 'Request latency in ms', buckets=[100, 500, 1000, 2000, 3000, 5000, 10000])
+P_COST = Counter('request_cost_usd_total', 'Total cost in USD')
+P_TOKENS_IN = Counter('request_tokens_in_total', 'Total tokens in')
+P_TOKENS_OUT = Counter('request_tokens_out_total', 'Total tokens out')
+P_ERRORS = Counter('request_errors_total', 'Total number of errors', ['error_type'])
+P_QUALITY = Summary('request_quality_score', 'Summary of quality scores')
+P_PII_SCRUB = Counter('pii_scrub_total', 'Total number of PII elements redacted')
 
-def record_request(latency_ms: int, cost_usd: float, tokens_in: int, tokens_out: int, quality_score: float) -> None:
+
+def record_traffic() -> None:
     global TRAFFIC
     TRAFFIC += 1
+    P_TRAFFIC.inc()
+
+
+def record_request(latency_ms: int, cost_usd: float, tokens_in: int, tokens_out: int, quality_score: float) -> None:
     REQUEST_LATENCIES.append(latency_ms)
     REQUEST_COSTS.append(cost_usd)
     REQUEST_TOKENS_IN.append(tokens_in)
     REQUEST_TOKENS_OUT.append(tokens_out)
     QUALITY_SCORES.append(quality_score)
-
+    
+    # Update Prometheus metrics
+    P_LATENCY.observe(latency_ms)
+    P_COST.inc(cost_usd)
+    P_TOKENS_IN.inc(tokens_in)
+    P_TOKENS_OUT.inc(tokens_out)
+    P_QUALITY.observe(quality_score)
 
 
 def record_error(error_type: str) -> None:
     ERRORS[error_type] += 1
+    # Update Prometheus metrics
+    P_ERRORS.labels(error_type=error_type).inc()
 
 
 

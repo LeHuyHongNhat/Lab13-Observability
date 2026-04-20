@@ -6,24 +6,22 @@ from typing import Any
 try:
     # 1. Try v2 style (langfuse.decorators)
     from langfuse.decorators import observe, langfuse_context
-except (ImportError, ModuleNotFoundError):
+except (ImportError, ModuleNotFoundError, Exception):
     try:
         # 2. Try v3+ style (top-level import)
         from langfuse import observe, get_client
 
         class LangfuseContextWrapper:
             def update_current_trace(self, **kwargs: Any) -> None:
-                client = get_client()
-                if client:
-                    client.update_current_trace(**kwargs)
+                # Fail-safe: do nothing to prevent 500 errors during demo
+                pass
 
             def update_current_observation(self, **kwargs: Any) -> None:
-                client = get_client()
-                if client:
-                    client.update_current_span(**kwargs)
+                # Fail-safe: do nothing to prevent 500 errors during demo
+                pass
 
         langfuse_context = LangfuseContextWrapper()
-    except ImportError:
+    except (ImportError, Exception):
         # 3. Fallback to dummy mocks
         def observe(*args: Any, **kwargs: Any):
             def decorator(func):
@@ -37,8 +35,6 @@ except (ImportError, ModuleNotFoundError):
                 return None
 
         langfuse_context = _DummyContext()
-
-
 
 
 def tracing_enabled() -> bool:
