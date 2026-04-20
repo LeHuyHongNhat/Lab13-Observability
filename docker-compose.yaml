@@ -7,6 +7,7 @@ services:
     environment:
       - APP_NAME=day13-observability-lab
       - APP_ENV=dev
+      - TZ=UTC
     env_file:
       - .env
     volumes:
@@ -19,6 +20,8 @@ services:
       - ./config/alert_rules.yaml:/etc/prometheus/alert_rules.yaml
     ports:
       - "9090:9090"
+    environment:
+      - TZ=UTC
     depends_on:
       - app
 
@@ -30,6 +33,7 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - TZ=UTC
     volumes:
       - ./config/grafana_provisioning_dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
       - ./config/grafana_provisioning_datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
