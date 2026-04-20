@@ -11,16 +11,36 @@ except (ImportError, ModuleNotFoundError, Exception):
         # 2. Try v3+ style (top-level import)
         from langfuse import observe, get_client
 
-
-
         class LangfuseContextWrapper:
             def update_current_trace(self, **kwargs: Any) -> None:
-                # Fail-safe: do nothing to prevent 500 errors during demo
-                pass
+                client = get_client()
+                if client:
+                    try:
+                        client.update_current_trace(**kwargs)
+                    except Exception:
+                        pass
 
             def update_current_observation(self, **kwargs: Any) -> None:
-                # Fail-safe: do nothing to prevent 500 errors during demo
-                pass
+                client = get_client()
+                if not client:
+                    return
+
+                # Handle metadata separately (for v3+)
+                metadata = kwargs.get("metadata")
+                if metadata is not None:
+                    try:
+                        client.update_current_span(metadata=metadata)
+                    except Exception:
+                        pass
+
+                # Handle usage_details separately (split into update_current_generation)
+                usage_details = kwargs.get("usage_details")
+                if usage_details is not None:
+                    try:
+                        client.update_current_generation(
+                            usage_details=usage_details)
+                    except Exception:
+                        pass
 
         langfuse_context = LangfuseContextWrapper()
     except (ImportError, Exception):
@@ -33,6 +53,7 @@ except (ImportError, ModuleNotFoundError, Exception):
         class _DummyContext:
             def update_current_trace(self, **kwargs: Any) -> None:
                 return None
+
             def update_current_observation(self, **kwargs: Any) -> None:
                 return None
 
