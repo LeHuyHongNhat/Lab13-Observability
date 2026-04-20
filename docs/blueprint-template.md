@@ -46,11 +46,11 @@
 ---
 
 ## 4. Incident Response (Group)
-- [SCENARIO_NAME]: (e.g., rag_slow)
-- [SYMPTOMS_OBSERVED]: 
-- [ROOT_CAUSE_PROVED_BY]: (List specific Trace ID or Log Line)
-- [FIX_ACTION]: 
-- [PREVENTIVE_MEASURE]: 
+- [SCENARIO_NAME]: rag_slow
+- [SYMPTOMS_OBSERVED]: Baseline load test (concurrency 5) returned 10/10 successful requests with client-observed latency mostly in 311-768ms. After enabling rag_slow, the same workload still returned 10/10 successful requests but latency jumped to 2.66s-13.27s at client side. In service logs, `response_sent.latency_ms` increased from a stable 150ms baseline to a stable 2650ms under incident.
+- [ROOT_CAUSE_PROVED_BY]: `data/logs.jsonl` line 21 records `incident_enabled` for `rag_slow`; `app/mock_rag.py` line 17 gates a deliberate `time.sleep(2.5)` when `STATE["rag_slow"]` is true, directly causing the latency increase.
+- [FIX_ACTION]: Disable incident via `python scripts/inject_incident.py --scenario rag_slow --disable`, then rerun load test to verify latency returns to baseline profile.
+- [PREVENTIVE_MEASURE]: Add alert monitoring for latency P95, include incident-toggle check as the first runbook step, and keep baseline-vs-incident replay as a mandatory pre-demo verification.
 
 ---
 
