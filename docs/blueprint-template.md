@@ -55,7 +55,7 @@
 ## 5. Individual Contributions & Evidence
 
 ### Nguyễn Quốc Khánh
-- [TASKS_COMPLETED]: Triển khai Correlation ID Middleware, cấu hình JSON Logging chuẩn schema, viết bộ lọc PII cho Điện thoại, CCCD và dữ liệu cá nhân VN.
+- [TASKS_COMPLETED]: Triển khai Correlation ID Middleware, cấu hình JSON Logging chuẩn schema, viết bộ lọc PII cho các dữ liệu nhạy cảm.
 - [EVIDENCE_LINK]: evidence/04_pii_scrubbing_logs.png
 
 ### Nguyễn Tuấn Khải
