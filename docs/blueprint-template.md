@@ -3,14 +3,15 @@
 > **Instruction**: Fill in all sections below. This report is designed to be parsed by an automated grading assistant. Ensure all tags (e.g., `[GROUP_NAME]`) are preserved.
 
 ## 1. Team Metadata
-- [GROUP_NAME]: Lab13-Observability-Team
+- [GROUP_NAME]: C401-D6
 - [REPO_URL]: https://github.com/LeHuyHongNhat/Lab13-Observability
 - [MEMBERS]:
-  - Member A: Khánh (khanhnq) | Role: Logging & PII
-  - Member B: Khải | Role: Tracing & Enrichment
-  - Member C: Tấn (tan) | Role: SLO & Alerts
-  - Member D: Thành | Role: Load Test & Incident Injection
-  - Member E: Sơn (sonnq) | Role: Dashboard & Report
+  - Member A: Nguyễn Quốc Khánh (khanhnq) | Role: Logging & PII Scrubbing
+  - Member B: Nguyễn Tuấn Khải (Khaidz) | Role: Tracing & Tags
+  - Member C: Phan Văn Tấn (tan) | Role: SLO & Alerts
+  - Member D: Lê Công Thành (thanh) | Role: Load Test & Incident Debugging
+  - Member E: Nguyễn Quế Sơn (sonnq) | Role: Dashboard & Evidence Collection
+  - Member F: Lê Huy Hồng Nhật (nhat) | Role: Blueprint & Demo Lead
 
 ---
 
@@ -61,7 +62,7 @@
 
 ### Khải (Member B)
 - [TASKS_COMPLETED]: Langfuse tracing integration with `@observe()` decorator, trace enrichment with user_id, session_id, tags, token usage tracking
-- [EVIDENCE_LINK]: `app/tracing.py`, `app/agent.py` (observe decorator + update_current_trace)
+- [EVIDENCE_LINK]: Branch `origin/Khaidz` merged into `sonnq` (plus `app/tracing.py`, `app/agent.py`)
 
 ### Tấn (Member C)
 - [TASKS_COMPLETED]: Alert rules definition (8 rules in config/alert_rules.yaml), SLO specification (config/slo.yaml), Runbook documentation (docs/alerts.md), Address PII pattern
@@ -69,11 +70,15 @@
 
 ### Thành (Member D)
 - [TASKS_COMPLETED]: Load test script (scripts/load_test.py), Incident injection script (scripts/inject_incident.py), Log validation script (scripts/validate_logs.py)
-- [EVIDENCE_LINK]: scripts/ directory
+- [EVIDENCE_LINK]: Branch `origin/thanh` merged into `sonnq`
 
-### Sơn (Member E)
+### Nguyễn Quế Sơn (Member E)
 - [TASKS_COMPLETED]: Grafana dashboard with 6 panels (Latency, Traffic, Error Rate, Cost, Tokens, Quality), Prometheus metrics integration, Docker Compose orchestration, Evidence collection and final report
-- [EVIDENCE_LINK]: config/grafana_dashboard.json, docker-compose.yaml, evidence/ directory
+- [EVIDENCE_LINK]: config/grafana_dashboard.json, evidence/ directory
+
+### Lê Huy Hồng Nhật (Member F)
+- [TASKS_COMPLETED]: Project management, Blueprint documentation lead, Demo scenario preparation, Root Cause Analysis (RCA) reporting
+- [EVIDENCE_LINK]: docs/blueprint-template.md, docs/grading-evidence.md
 
 ---
 
