@@ -17,7 +17,7 @@ from .metrics import record_error, record_traffic, snapshot
 from .middleware import CorrelationIdMiddleware
 from .pii import hash_user_id, summarize_text
 from .schemas import ChatRequest, ChatResponse
-from .tracing import tracing_enabled
+from .tracing import flush_traces, tracing_enabled
 
 configure_logging()
 log = get_logger()
@@ -80,6 +80,7 @@ async def chat(request: Request, body: ChatRequest) -> ChatResponse:
             quality_score=result.quality_score,
             payload={"answer_preview": summarize_text(result.answer)},
         )
+        flush_traces()
         return ChatResponse(
             answer=result.answer,
             correlation_id=request.state.correlation_id,

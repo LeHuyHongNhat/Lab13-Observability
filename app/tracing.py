@@ -2,18 +2,43 @@ from __future__ import annotations
 
 import os
 from typing import Any
+import logging
+
+logger = logging.getLogger("langfuse_tracing")
+
+_client = None
 
 try:
-    from langfuse import get_client, observe
+    from langfuse import observe, get_client
 
-    _langfuse_client = get_client()
+    # Langfuse v3.2.1 uses LANGFUSE_BASE_URL, not LANGFUSE_HOST
+    # Set it from LANGFUSE_HOST if not already set
+    if os.getenv("LANGFUSE_HOST") and not os.getenv("LANGFUSE_BASE_URL"):
+        os.environ["LANGFUSE_BASE_URL"] = os.getenv("LANGFUSE_HOST")
 
-    class _LangfuseContextAdapter:
+    _client = get_client()
+    logger.info("Langfuse client initialized successfully")
+
+    class _LangfuseContext:
+        """Adapter for langfuse v3.2.1 which has no langfuse_context module."""
+
         def update_current_trace(self, **kwargs: Any) -> None:
-            _langfuse_client.update_current_trace(**kwargs)
+            try:
+                _client.update_current_trace(**kwargs)
+            except Exception:
+                pass
 
-    from langfuse import langfuse_context, observe
-except Exception:  # pragma: no cover
+        def update_current_observation(self, **kwargs: Any) -> None:
+            try:
+                _client.update_current_observation(**kwargs)
+            except Exception:
+                pass
+
+    langfuse_context = _LangfuseContext()
+
+except Exception as exc:
+    logger.warning(f"Langfuse not available, tracing disabled: {exc}")
+
     def observe(*args: Any, **kwargs: Any):
         def decorator(func):
             return func
@@ -21,13 +46,20 @@ except Exception:  # pragma: no cover
 
     class _DummyContext:
         def update_current_trace(self, **kwargs: Any) -> None:
-            return None
-
+            pass
         def update_current_observation(self, **kwargs: Any) -> None:
-            return None
+            pass
 
     langfuse_context = _DummyContext()
 
 
 def tracing_enabled() -> bool:
-    return bool(os.getenv("LANGFUSE_PUBLIC_KEY") and os.getenv("LANGFUSE_SECRET_KEY"))
+    return _client is not None
+
+
+def flush_traces() -> None:
+    if _client is not None:
+        try:
+            _client.flush()
+        except Exception:
+            pass
