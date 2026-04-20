@@ -1,0 +1,20 @@
+{"user_id": "khanhnq_01", "session_id": "ses_001", "feature": "qa", "message": "How do I set up structured logging in Python?"}
+{"user_id": "khanhnq_02", "session_id": "ses_002", "feature": "coding", "message": "Write a python function to redact credit cards."}
+{"user_id": "khanhnq_01", "session_id": "ses_001", "feature": "qa", "message": "What are the benefits of Grafana?"}
+{"user_id": "khanhnq_03", "session_id": "ses_003", "feature": "policy_check", "message": "What is the PII policy for VinUni students?"}
+{"user_id": "khanhnq_04", "session_id": "ses_004", "feature": "it_support", "message": "My MAC address is 00:1A:2B:3C:4D:5E, help me connect to wifi."}
+{"user_id": "khanhnq_02", "session_id": "ses_002", "feature": "qa", "message": "Explain Prometheus metrics types."}
+{"user_id": "khanhnq_05", "session_id": "ses_005", "feature": "network_debug", "message": "Can't access 10.0.0.1 from my local network."}
+{"user_id": "khanhnq_06", "session_id": "ses_006", "feature": "qa", "message": "Why is observability important?"}
+{"user_id": "khanhnq_01", "session_id": "ses_001", "feature": "it_support", "message": "My student ID is 21CE0001, please reset my password."}
+{"user_id": "khanhnq_07", "session_id": "ses_007", "feature": "coding", "message": "How to use structlog with FastAPI?"}
+{"user_id": "khanhnq_03", "session_id": "ses_008", "feature": "qa", "message": "What is the difference between logging and tracing?"}
+{"user_id": "khanhnq_04", "session_id": "ses_009", "feature": "policy_check", "message": "Can I use bank account 1234567890 for tuition?"}
+{"user_id": "khanhnq_08", "session_id": "ses_010", "feature": "it_support", "message": "My OTP is 123456, it doesn't work."}
+{"user_id": "khanhnq_02", "session_id": "ses_011", "feature": "qa", "message": "How to monitor tail latency?"}
+{"user_id": "khanhnq_09", "session_id": "ses_012", "feature": "qa", "message": "What is OpenTelemetry?"}
+{"user_id": "khanhnq_10", "session_id": "ses_013", "feature": "coding", "message": "Generate a random 12 digit number."}
+{"user_id": "khanhnq_01", "session_id": "ses_001", "feature": "network_debug", "message": "Check connectivity to database."}
+{"user_id": "khanhnq_05", "session_id": "ses_014", "feature": "qa", "message": "Best practices for dashboard design."}
+{"user_id": "khanhnq_03", "session_id": "ses_015", "feature": "policy_check", "message": "Who is responsible for PII security?"}
+{"user_id": "khanhnq_02", "session_id": "ses_016", "feature": "it_support", "message": "My email is test@vinuni.edu.vn."}

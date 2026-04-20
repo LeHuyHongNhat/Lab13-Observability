@@ -1,19 +1,38 @@
-alerts:
-  - name: high_latency_p95
-    severity: P2
-    condition: latency_p95_ms > 5000 for 30m
-    type: symptom-based
-    owner: team-oncall
-    runbook: docs/alerts.md#1-high-latency-p95
-  - name: high_error_rate
-    severity: P1
-    condition: error_rate_pct > 5 for 5m
-    type: symptom-based
-    owner: team-oncall
-    runbook: docs/alerts.md#2-high-error-rate
-  - name: cost_budget_spike
-    severity: P2
-    condition: hourly_cost_usd > 2x_baseline for 15m
-    type: symptom-based
-    owner: finops-owner
-    runbook: docs/alerts.md#3-cost-budget-spike
+groups:
+  - name: Lab13Alerts
+    rules:
+      - alert: HighLatencyP95
+        expr: histogram_quantile(0.95, sum(rate(request_latency_ms_bucket[5m])) by (le)) > 5000
+        for: 2m
+        labels:
+          severity: P2
+        annotations:
+          summary: "High Latency (P95 > 5s)"
+          runbook: "docs/alerts.md#1-high-latency-p95"
+
+      - alert: HighErrorRate
+        expr: (sum(rate(request_errors_total[5m])) / sum(rate(request_total[5m]))) * 100 > 5
+        for: 1m
+        labels:
+          severity: P1
+        annotations:
+          summary: "High Error Rate (> 5%)"
+          runbook: "docs/alerts.md#2-high-error-rate"
+
+      - alert: SuddenTrafficDrop
+        expr: sum(rate(request_total[5m])) < 0.1
+        for: 5m
+        labels:
+          severity: P1
+        annotations:
+          summary: "Sudden Traffic Drop"
+          runbook: "docs/alerts.md#4-sudden-traffic-drop"
+
+      - alert: HighPIIRedaction
+        expr: rate(pii_scrub_total[5m]) * 60 > 10
+        for: 5m
+        labels:
+          severity: P2
+        annotations:
+          summary: "High PII Redaction Activity"
+          runbook: "docs/alerts.md#5-pii-redaction-spike"

@@ -4,7 +4,7 @@ Dựa trên yêu cầu của `README.md` và `day13-rubric-for-instructor.md`, l
 
 ## Phân công vai trò & Kế hoạch chi tiết
 
-### 1. Lê Huy Hồng Nhật (Tôi) - Vai trò: Member F (Blueprint, Demo Lead & Tiên phong dự án)
+### 1. Lê Huy Hồng Nhật (Tôi) - Vai trò: Member F (Blueprint, Demo Lead & Team Lead)
 - **Nhiệm vụ chính:** Quản lý chung, viết báo cáo tổng kết (Blueprint), đảm bảo tiến độ và dẫn dắt phần Live Demo.
 - **Chi tiết công việc:**
   - Xử lý và hoàn thiện file `docs/blueprint-template.md` (tổng hợp phần báo cáo của tất cả thành viên).
