@@ -9,6 +9,7 @@ PII_PATTERNS: dict[str, str] = {
     "phone_vn": r"(?:\+84|0)[ \.-]?\d{3}[ \.-]?\d{3}[ \.-]?\d{3,4}",           # 090 123 4567, +84.987.654.321
     "cccd": r"\b\d{12}\b",                                                         # Căn cước công dân 12 số
     "passport_vn": r"\b[A-Z]\d{7}\b",                                             # Hộ chiếu: B1234567
+    "address_vn": r"(?i)\b(?:số nhà|số|ngõ|ngách|hẻm|đường|phố|phường|xã|quận|huyện|thành phố|tỉnh)\s+[\w\s,/\-]+",
     "dob": r"\b(?:0?[1-9]|[12]\d|3[01])[\/\-\.](?:0?[1-9]|1[0-2])[\/\-\.](?:19|20)\d{2}\b",  # DD/MM/YYYY, DD-MM-YYYY
     "license_plate_vn": r"\b\d{2}[A-Z]\d?[-\s]?\d{4,5}\b",                      # 51G-12345, 30A 12345
 

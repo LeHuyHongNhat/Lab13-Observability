@@ -1,19 +1,49 @@
 alerts:
-  - name: high_latency_p95
+  - name: high_latency_p95 #Nếu request chậm kinh khủng (95% request > 5s) trong thời gian dài → cảnh báo.
     severity: P2
     condition: latency_p95_ms > 5000 for 30m
     type: symptom-based
     owner: team-oncall
     runbook: docs/alerts.md#1-high-latency-p95
-  - name: high_error_rate
+  - name: high_error_rate #Nếu hệ thống bắt đầu trả lỗi nhiều (>5%) trong thời gian ngắn → báo ngay.
     severity: P1
     condition: error_rate_pct > 5 for 5m
     type: symptom-based
     owner: team-oncall
     runbook: docs/alerts.md#2-high-error-rate
-  - name: cost_budget_spike
+  - name: cost_budget_spike #Nếu tiền chi trả cho AI tăng đột biến (gấp đôi bình thường) → cảnh báo để tránh cháy túi.
     severity: P2
     condition: hourly_cost_usd > 2x_baseline for 15m
     type: symptom-based
     owner: finops-owner
     runbook: docs/alerts.md#3-cost-budget-spike
+  - name: traffic_drop_sudden #Nếu lượng truy cập giảm đột ngột (chỉ còn 50% bình thường) → có thể do lỗi routing.
+    severity: P1
+    condition: request_rate_rps < 0.5x_baseline for 10m
+    type: symptom-based
+    owner: team-oncall
+    runbook: docs/alerts.md#4-sudden-traffic-drop
+  - name: pii_redaction_spike #Nếu có quá nhiều dữ liệu nhạy cảm bị người dùng đẩy lên → nguy cơ lộ lọt dữ liệu.
+    severity: P2
+    condition: pii_scrub_count > 50 for 15m
+    type: symptom-based
+    owner: security-team
+    runbook: docs/alerts.md#5-pii-redaction-spike
+  - name: context_window_limit #Nếu lượng token đầu vào liên tục chót vót → nguy cơ nổ bộ nhớ AI.
+    severity: P3
+    condition: tokens_in_per_request > 100000 for 10m
+    type: symptom-based
+    owner: ai-engineer
+    runbook: docs/alerts.md#6-context-window-limit
+  - name: schema_validation_spike #Nếu có quá nhiều lỗi 422 (data gửi lên sai định dạng) → Client bị lỗi code hoặc đang bị hacker fuzzing.
+    severity: P2
+    condition: http_status_422_rate > 5 for 10m
+    type: symptom-based
+    owner: backend-team
+    runbook: docs/alerts.md#7-schema-validation-spike
+  - name: high_llm_token_usage #Nếu token đầu ra (output) tăng vọt (ví dụ hơn 200k tokens/giờ) → cảnh báo về chi phí.
+    severity: P2
+    condition: total_tokens_out_per_hour > 200000 for 1h
+    type: symptom-based
+    owner: ai-engineer
+    runbook: docs/alerts.md#8-high-llm-token-usage
