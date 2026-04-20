@@ -14,6 +14,8 @@ PII_PATTERNS: dict[str, str] = {
     "dob": r"\b(?:(?:0?[1-9]|[12]\d|3[01])[\/\-\.](?:0?[1-9]|1[0-2])[\/\-\.](?:19|20)\d{2}|(?:19|20)\d{2}[\/\-\.](?:0?[1-9]|1[0-2])[\/\-\.](?:0?[1-9]|[12]\d|3[01]))\b",
     "license_plate_vn": r"(?i)\b\d{2}[A-Z]\d?[\-\s\.]?\d{4,5}\b",                 # 51G-123.45
 
+
+
     # ── Tài chính ──────────────────────────────────────────────────────────────
     "tax_code_vn": r"\b\d{10}(?:-\d{3})?\b",                                      # Mã số thuế: 10 số hoặc 10-3 số
     "credit_card": r"(?<!\d)(?:\d[ -]*?){13,19}(?!\d)",                           # Hỗ trợ 13-19 số, dời xuống sau tax_code để ưu tiên
@@ -33,6 +35,8 @@ PII_PATTERNS: dict[str, str] = {
 
     # ── Fallback Catch-All cho dải số học (Tài khoản ngân hàng / PIN dài) ───
     "bank_account_or_id": r"\b\d{6,}\b",                                          # Dãy từ 6 số trở lên (STK ngân hàng, mã số lạ...)
+
+
 }
 
 

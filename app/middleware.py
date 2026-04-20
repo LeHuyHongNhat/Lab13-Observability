@@ -17,6 +17,8 @@ class CorrelationIdMiddleware(BaseHTTPMiddleware):
         correlation_id = request.headers.get("x-request-id") or f"req-{uuid.uuid4().hex[:8]}"
         
         # Bind the correlation_id to structlog contextvars
+        # Bind the correlation_id to structlog contextvars
+
         bind_contextvars(correlation_id=correlation_id)
 
         request.state.correlation_id = correlation_id
@@ -28,5 +30,6 @@ class CorrelationIdMiddleware(BaseHTTPMiddleware):
         # Add the correlation_id and processing time to response headers
         response.headers["x-request-id"] = correlation_id
         response.headers["x-response-time-ms"] = str(elapsed_ms)
+
         
         return response
