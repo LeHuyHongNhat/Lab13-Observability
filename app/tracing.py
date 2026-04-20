@@ -11,6 +11,7 @@ except (ImportError, ModuleNotFoundError):
         # 2. Try v3+ style (top-level import)
         from langfuse import observe, get_client
 
+
         class LangfuseContextWrapper:
             def update_current_trace(self, **kwargs: Any) -> None:
                 client = get_client()

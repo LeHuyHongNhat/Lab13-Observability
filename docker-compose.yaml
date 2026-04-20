@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_NAME=day13-observability-lab
+      - APP_ENV=dev
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./config/alert_rules.yaml:/etc/prometheus/alert_rules.yaml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - app
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    volumes:
+      - ./config/grafana_provisioning_dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
+      - ./config/grafana_provisioning_datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+      - ./config/grafana_dashboard.json:/etc/grafana/provisioning/dashboards/lab13_dashboard.json
+    depends_on:
+      - prometheus

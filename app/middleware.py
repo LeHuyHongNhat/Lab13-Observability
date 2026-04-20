@@ -29,5 +29,6 @@ class CorrelationIdMiddleware(BaseHTTPMiddleware):
         # Add the correlation_id and processing time to response headers
         response.headers["x-request-id"] = correlation_id
         response.headers["x-response-time-ms"] = str(elapsed_ms)
+
         
         return response
